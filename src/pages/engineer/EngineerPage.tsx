@@ -123,132 +123,134 @@ export const EngineerPage: React.FC = () => {
       {/* <PageHeader title="Engineer page" /> */}
 
       <main className="flex-1 p-4">
-        <Tabs defaultValue="analysis" className="space-y-3">
-          <TabsList className="h-8">
-            <TabsTrigger value="analysis" className="text-xs px-4">
-              Analysis
-            </TabsTrigger>
-            <TabsTrigger value="existing" className="text-xs px-4">
-              Existing Data
-            </TabsTrigger>
-          </TabsList>
+        <div className="md:container md:mx-auto">
+          <Tabs defaultValue="analysis" className="space-y-3">
+            <TabsList className="h-8">
+              <TabsTrigger value="analysis" className="text-xs px-4">
+                Analysis
+              </TabsTrigger>
+              <TabsTrigger value="existing" className="text-xs px-4">
+                Existing Data
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="analysis" className="space-y-3 mt-2">
-            {/* Filters */}
-            <div className="bg-card border border-border rounded-md p-3 space-y-3">
-              <p className="text-[11px] text-muted-foreground">
-                Select at least one product
-              </p>
-              <CascadeDropdowns
-                programs={programs}
-                productCategories={productCategories}
-                subsystems={subsystems}
-                products={products}
-                selectedProgram={program}
-                selectedProductCategory={productCategory}
-                selectedSubsystem={subsystem}
-                selectedProduct={product}
-                onProgramChange={handleProgramChange}
-                onProductCategoryChange={handleProductCategoryChange}
-                onSubsystemChange={handleSubsystemChange}
-                onProductChange={handleProductChange}
-                isLoading={isLoading}
-              />
-              <div className="grid grid-cols-12 gap-3 items-start">
-                <div className="col-span-3">
-                  <p className="text-[11px] text-muted-foreground mb-1">
-                    Prompt (optional)
-                  </p>
-                  <Select
-                    value={suggestedPrompt}
-                    onValueChange={setSuggestedPrompt}
-                    disabled={!allSelected}
-                  >
-                    <SelectTrigger className="text-xs">
-                      <SelectValue placeholder="Suggested Prompts" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {SUGGESTED_PROMPTS.map((p) => (
-                        <SelectItem key={p} value={p}>
-                          {p}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="col-span-6">
-                  <p className="text-[11px] text-muted-foreground mb-1">
-                    &nbsp;
-                  </p>
-                  <Textarea
-                    placeholder="Custom Prompt"
-                    value={customPrompt}
-                    onChange={(e) => setCustomPrompt(e.target.value)}
-                    disabled={!allSelected}
-                    className="text-xs min-h-[60px] resize-none"
-                  />
-                </div>
-                <div className="col-span-3 flex flex-col gap-2 pt-4">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="text-xs h-7 gap-1.5"
-                    onClick={handleRegenerate}
-                    disabled={!tableRows.length || isGenerating}
-                  >
-                    {isGenerating ? (
-                      <Loader2 className="h-3 w-3 animate-spin" />
-                    ) : (
-                      <RefreshCw className="h-3 w-3" />
-                    )}
-                    Re-generate DFMEA
-                  </Button>
-                  <Button
-                    size="sm"
-                    className="text-xs h-7"
-                    onClick={handleGenerate}
-                    disabled={!allSelected || isGenerating}
-                  >
-                    {isGenerating && (
-                      <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
-                    )}
-                    Generate DFMEA
-                  </Button>
+            <TabsContent value="analysis" className="space-y-3 mt-2">
+              {/* Filters */}
+              <div className="bg-card border border-border rounded-md p-3 space-y-3">
+                <p className="text-[11px] text-muted-foreground">
+                  Select at least one product
+                </p>
+                <CascadeDropdowns
+                  programs={programs}
+                  productCategories={productCategories}
+                  subsystems={subsystems}
+                  products={products}
+                  selectedProgram={program}
+                  selectedProductCategory={productCategory}
+                  selectedSubsystem={subsystem}
+                  selectedProduct={product}
+                  onProgramChange={handleProgramChange}
+                  onProductCategoryChange={handleProductCategoryChange}
+                  onSubsystemChange={handleSubsystemChange}
+                  onProductChange={handleProductChange}
+                  isLoading={isLoading}
+                />
+                <div className="grid grid-cols-12 gap-3 items-start">
+                  <div className="col-span-3">
+                    <p className="text-[11px] text-muted-foreground mb-1">
+                      Prompt (optional)
+                    </p>
+                    <Select
+                      value={suggestedPrompt}
+                      onValueChange={setSuggestedPrompt}
+                      disabled={!allSelected}
+                    >
+                      <SelectTrigger className="text-xs">
+                        <SelectValue placeholder="Suggested Prompts" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {SUGGESTED_PROMPTS.map((p) => (
+                          <SelectItem key={p} value={p}>
+                            {p}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="col-span-6">
+                    <p className="text-[11px] text-muted-foreground mb-1">
+                      &nbsp;
+                    </p>
+                    <Textarea
+                      placeholder="Custom Prompt"
+                      value={customPrompt}
+                      onChange={(e) => setCustomPrompt(e.target.value)}
+                      disabled={!allSelected}
+                      className="text-xs min-h-[60px] resize-none"
+                    />
+                  </div>
+                  <div className="col-span-3 flex flex-col gap-2 pt-4">
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="text-xs h-7 gap-1.5"
+                      onClick={handleRegenerate}
+                      disabled={!tableRows.length || isGenerating}
+                    >
+                      {isGenerating ? (
+                        <Loader2 className="h-3 w-3 animate-spin" />
+                      ) : (
+                        <RefreshCw className="h-3 w-3" />
+                      )}
+                      Re-generate DFMEA
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={handleGenerate}
+                      disabled={!allSelected || isGenerating}
+                    >
+                      {isGenerating && (
+                        <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
+                      )}
+                      Generate DFMEA
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Table */}
-            <div className="bg-card border border-border rounded-md p-3 space-y-3">
-              <DfmeaTable
-                rows={tableRows}
-                showFeedback
-                onFeedback={handleFeedback}
-              />
-              {tableRows.length > 0 && (
-                <div className="flex justify-end">
-                  <Button
-                    size="sm"
-                    className="text-xs h-7"
-                    onClick={handleSave}
-                    disabled={saveMutation.isPending}
-                  >
-                    {saveMutation.isPending && (
-                      <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
-                    )}
-                    Save DFMEA
-                  </Button>
-                </div>
-              )}
-            </div>
-          </TabsContent>
+              {/* Table */}
+              <div className="bg-card border border-border rounded-md p-3 space-y-3">
+                <DfmeaTable
+                  rows={tableRows}
+                  showFeedback
+                  onFeedback={handleFeedback}
+                />
+                {tableRows.length > 0 && (
+                  <div className="flex justify-end">
+                    <Button
+                      size="sm"
+                      className="text-xs h-7"
+                      onClick={handleSave}
+                      disabled={saveMutation.isPending}
+                    >
+                      {saveMutation.isPending && (
+                        <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
+                      )}
+                      Save DFMEA
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
 
-          <TabsContent value="existing">
-            <div className="bg-card border border-border rounded-md p-6 text-center text-sm text-muted-foreground">
-              Select filters above to browse existing DFMEA data.
-            </div>
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="existing">
+              <div className="bg-card border border-border rounded-md p-6 text-center text-sm text-muted-foreground">
+                Select filters above to browse existing DFMEA data.
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </main>
 
       {/* Footer: VectorDB + Help on every page */}

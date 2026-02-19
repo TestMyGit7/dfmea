@@ -547,37 +547,39 @@ export const AdminPage: React.FC = () => {
       {/* <PageHeader title="Admin page" /> */}
 
       <main className="flex-1 p-4 ">
-        <Tabs defaultValue="analysis" className="space-y-3">
-          <TabsList className="h-8">
-            <TabsTrigger value="analysis" className="text-xs px-4">
-              Analysis
-            </TabsTrigger>
-            <TabsTrigger value="upload" className="text-xs px-4">
-              Upload
-            </TabsTrigger>
-            <TabsTrigger value="existing" className="text-xs px-4">
-              Existing Data
-            </TabsTrigger>
-          </TabsList>
+        <div className="md:container md:mx-auto">
+          <Tabs defaultValue="analysis" className="space-y-3">
+            <TabsList className="h-8">
+              <TabsTrigger value="analysis" className="text-xs px-4">
+                Analysis
+              </TabsTrigger>
+              <TabsTrigger value="upload" className="text-xs px-4">
+                Upload
+              </TabsTrigger>
+              <TabsTrigger value="existing" className="text-xs px-4">
+                Existing Data
+              </TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="analysis">
-            <AnalysisTab
-              allData={allData}
-              isLoading={isLoading}
-              onSuccess={setFooterSuccess}
-            />
-          </TabsContent>
+            <TabsContent value="analysis">
+              <AnalysisTab
+                allData={allData}
+                isLoading={isLoading}
+                onSuccess={setFooterSuccess}
+              />
+            </TabsContent>
 
-          <TabsContent value="upload">
-            <UploadTab onSuccess={setFooterSuccess} />
-          </TabsContent>
+            <TabsContent value="upload">
+              <UploadTab onSuccess={setFooterSuccess} />
+            </TabsContent>
 
-          <TabsContent value="existing">
-            <div className="bg-card border border-border rounded-md p-6 text-center text-sm text-muted-foreground">
-              Select filters to browse existing DFMEA data.
-            </div>
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="existing">
+              <div className="bg-card border border-border rounded-md p-6 text-center text-sm text-muted-foreground">
+                Select filters to browse existing DFMEA data.
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
       </main>
 
       {/* Footer: VectorDB + Help on every page */}
