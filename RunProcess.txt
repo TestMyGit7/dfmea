@@ -1,0 +1,110 @@
+python -m venv dfmea
+
+
+Run: (backend)
+uvicorn server.main:app --reload --port 8000
+uvicorn main:app --reload --port 8000
+
+
+Swager: (/dfmea/mappings)
+http://localhost:8000/docs
+
+FrontEnd:
+streamlet run app.py
+
+API:
+http://localhost:8000/dfmea/mappings
+
+Login as Admin: admin@123
+
+http://localhost:8501/
+
+----------------------------- Process ----------------------------
+Backend:-----
+- open cmd or VS code
+- open cmd and drag the file (activate.bat)
+  (C:\python_env\dfmea\Scripts)
+- cd.. 
+- uvicorn server.main:app --reload --port 8000
+- uvicorn main:app --reload --port 8000
+
+Frontend:-----
+- open cmd and drag the file (activate.bat)
+  (C:\python_env\dfmea\Scripts)
+- streamlit run app.py
+
+- refresh the frontend until see the data in 
+  "Choose Product Category" dropdown
+----------------------------
+
+
+****************************************
+API Base:
+app.py:
+20: API_BASE = "http://127.0.0.1:8000"
+
+http://127.0.0.1:8000/dfmea/generate
+
+API's EndPoints: -----
+main.py:
+132: @app.post("/dfmea/generate")
+432: @app.get("/vectorstore/status")
+518: @app.post("/dfmea/feedback")
+551: @app.post("/dfmea/backend_ingest")
+837: @app.get("/dfmea/mappings") (dropdown (4nos) data)
+
+864: @app.post("/programs/create") (multi uploads: program if not in exist: new prog)
+934: @app.get("/programs") (multi uploads: program exist/new prog)
+
+954: @app.post("/dfmea/save") (Result Tab)
+1022: @app.get("/dfmea/{run_id}") (viewer tab)
+989: @app.get("/dfmea/list") (viewer tab)
+
+*1047: @app.get("/health")
+
+
+
+Role based:
+main.py:
+561: role = "admin"
+****************************************
+
+Settings:
+GET: http://127.0.0.1:8000/dfmea/mappings
+
+
+DFMEA Analysis Output:
+POST: http://127.0.0.1:8000/dfmea/generate
+
+Upload:
+/dfmea/backend_ingest
+
+Saved DFMEAs:
+/dfmea/list
+
+Suggested Prompts:
+
+-------------------------------
+Navigate to create env folder (ex. C:)
+python -m venv python_env
+- for activating: (drag the scripts/activate.bat file in the same cmd window)
+  - <name>/scripts/activate.bat
+- Install depen (requirements.txt):
+  - pip install -r requirements.txt
+
+-----------------------------------
+
+-------------------------------
+Navigate to create env folder (ex. C:)
+python -m venv python_env
+- for activating: (drag the scripts/activate.bat file in the same cmd window)
+- pip install -r requirements.txt
+
+-----------------------------------
+
+
+
+
+Ensures reliable key actuation and contact
+Keypad Connector
+
