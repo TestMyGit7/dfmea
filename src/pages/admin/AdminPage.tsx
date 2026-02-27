@@ -180,10 +180,10 @@ interface AnalysisTabProps {
 function AnalysisTab({ allData, isLoading, onSuccess }: AnalysisTabProps) {
   const saveMutation = useSaveDfmea();
 
-  const [program, setProgram] = useState("");
-  const [productCategory, setProductCategory] = useState("");
-  const [subsystem, setSubsystem] = useState("");
-  const [product, setProduct] = useState("");
+  const [program, setProgram] = useState<string[]>([]);
+  const [productCategory, setProductCategory] = useState<string[]>([]);
+  const [subsystem, setSubsystem] = useState<string[]>([]);
+  const [product, setProduct] = useState<string[]>([]);
   const [suggestedPrompt, setSuggestedPrompt] = useState("");
   const [customPrompt, setCustomPrompt] = useState("");
   const [tableRows, setTableRows] = useState<FmeaRow[]>([]);
@@ -194,42 +194,57 @@ function AnalysisTab({ allData, isLoading, onSuccess }: AnalysisTabProps) {
   const subsystems = useSubsystems(allData, program, productCategory);
   const products = useProducts(allData, program, productCategory, subsystem);
 
-  const allSelected = !!(program && productCategory && subsystem && product);
+  const allSelected =
+    program.length > 0 &&
+    productCategory.length > 0 &&
+    subsystem.length > 0 &&
+    product.length > 0;
 
-  const handleProgramChange = (v: string) => {
+  const handleProgramChange = (v: string[]) => {
     setProgram(v);
-    setProductCategory("");
-    setSubsystem("");
-    setProduct("");
+    setProductCategory([]);
+    setSubsystem([]);
+    setProduct([]);
     setTableRows([]);
   };
-  const handleProductCategoryChange = (v: string) => {
+  const handleProductCategoryChange = (v: string[]) => {
     setProductCategory(v);
-    setSubsystem("");
-    setProduct("");
+    setSubsystem([]);
+    setProduct([]);
     setTableRows([]);
   };
-  const handleSubsystemChange = (v: string) => {
+  const handleSubsystemChange = (v: string[]) => {
     setSubsystem(v);
-    setProduct("");
+    setProduct([]);
     setTableRows([]);
   };
-  const handleProductChange = (v: string) => {
+  const handleProductChange = (v: string[]) => {
     setProduct(v);
   };
-
   const handleGenerate = async () => {
     if (!allSelected) return;
     setIsGenerating(true);
     await new Promise((r) => setTimeout(r, 900));
-    setTableRows(generateMockFmeaRows(productCategory, product, subsystem));
+    setTableRows(
+      generateMockFmeaRows(
+        productCategory[0] || "",
+        product[0] || "",
+        subsystem[0] || "",
+      ),
+    );
     setIsGenerating(false);
   };
 
   const handleRegenerate = async () => {
     setIsGenerating(true);
     await new Promise((r) => setTimeout(r, 700));
-    setTableRows(generateMockFmeaRows(productCategory, product, subsystem));
+    setTableRows(
+      generateMockFmeaRows(
+        productCategory[0] || "",
+        product[0] || "",
+        subsystem[0] || "",
+      ),
+    );
     setIsGenerating(false);
   };
 
@@ -251,11 +266,15 @@ function AnalysisTab({ allData, isLoading, onSuccess }: AnalysisTabProps) {
     );
   };
 
-  const handleFeedback = (idx: number, type: "up" | "down") => {
+  const handleFeedback = (idx: number, type: "up" | "down" | null) => {
     setTableRows((prev) =>
-      prev.map((r, i) => (i === idx ? { ...r, feedback: type } : r)),
+      prev.map((r, i) =>
+        i === idx ? { ...r, feedback: type || undefined } : r,
+      ),
     );
   };
+
+  const hasFeedback = tableRows.some((r) => r.feedback);
 
   return (
     <div className="space-y-3">
@@ -310,32 +329,35 @@ function AnalysisTab({ allData, isLoading, onSuccess }: AnalysisTabProps) {
               className="text-xs min-h-[60px] resize-none"
             />
           </div>
-          <div className="col-span-3 flex flex-col gap-2 pt-4">
-            <Button
-              size="sm"
-              variant="outline"
-              className="text-xs h-7 gap-1.5"
-              onClick={handleRegenerate}
-              disabled={!tableRows.length || isGenerating}
-            >
-              {isGenerating ? (
-                <Loader2 className="h-3 w-3 animate-spin" />
-              ) : (
-                <RefreshCw className="h-3 w-3" />
-              )}
-              Re-generate DFMEA
-            </Button>
-            <Button
-              size="sm"
-              className="text-xs h-7"
-              onClick={handleGenerate}
-              disabled={!allSelected || isGenerating}
-            >
-              {isGenerating && (
-                <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
-              )}
-              Generate DFMEA
-            </Button>
+          <div className="h-full col-span-3 flex flex-col justify-end">
+            {hasFeedback ? (
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs h-7 gap-1.5"
+                onClick={handleRegenerate}
+                disabled={isGenerating}
+              >
+                {isGenerating ? (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                ) : (
+                  <RefreshCw className="h-3 w-3" />
+                )}
+                Re-generate DFMEA
+              </Button>
+            ) : (
+              <Button
+                size="sm"
+                className="text-xs h-7"
+                onClick={handleGenerate}
+                disabled={!allSelected || isGenerating}
+              >
+                {isGenerating && (
+                  <Loader2 className="h-3 w-3 mr-1.5 animate-spin" />
+                )}
+                Generate DFMEA
+              </Button>
+            )}
           </div>
         </div>
       </div>

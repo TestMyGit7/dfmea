@@ -33,10 +33,10 @@ const GENERATED_BY_OPTIONS = ["AI Model v1", "AI Model v2", "Manual"];
 export const ViewerPage: React.FC = () => {
   const { data: allData, isLoading } = useDfmeaData();
 
-  const [program, setProgram] = useState("");
-  const [productCategory, setProductCategory] = useState("");
-  const [subsystem, setSubsystem] = useState("");
-  const [product, setProduct] = useState("");
+  const [program, setProgram] = useState<string[]>([]);
+  const [productCategory, setProductCategory] = useState<string[]>([]);
+  const [subsystem, setSubsystem] = useState<string[]>([]);
+  const [product, setProduct] = useState<string[]>([]);
   const [prompt, setPrompt] = useState("");
   const [generatedBy, setGeneratedBy] = useState("");
   const [tableRows, setTableRows] = useState<FmeaRow[]>([]);
@@ -46,30 +46,44 @@ export const ViewerPage: React.FC = () => {
   const subsystems = useSubsystems(allData, program, productCategory);
   const products = useProducts(allData, program, productCategory, subsystem);
 
-  const handleProgramChange = (v: string) => {
+  const handleProgramChange = (v: string[]) => {
     setProgram(v);
-    setProductCategory("");
-    setSubsystem("");
-    setProduct("");
+    setProductCategory([]);
+    setSubsystem([]);
+    setProduct([]);
     setTableRows([]);
   };
-  const handleProductCategoryChange = (v: string) => {
+  const handleProductCategoryChange = (v: string[]) => {
     setProductCategory(v);
-    setSubsystem("");
-    setProduct("");
+    setSubsystem([]);
+    setProduct([]);
     setTableRows([]);
   };
-  const handleSubsystemChange = (v: string) => {
+  const handleSubsystemChange = (v: string[]) => {
     setSubsystem(v);
-    setProduct("");
+    setProduct([]);
     setTableRows([]);
   };
-  const handleProductChange = (v: string) => {
+  const handleProductChange = (v: string[]) => {
     setProduct(v);
-    setTableRows(generateMockFmeaRows(productCategory, v, subsystem));
+    if (v.length > 0) {
+      setTableRows(
+        generateMockFmeaRows(
+          productCategory[0] || "",
+          v[0] || "",
+          subsystem[0] || "",
+        ),
+      );
+    } else {
+      setTableRows([]);
+    }
   };
 
-  const allSelected = !!(program && productCategory && subsystem && product);
+  const allSelected =
+    program.length > 0 &&
+    productCategory.length > 0 &&
+    subsystem.length > 0 &&
+    product.length > 0;
 
   const handleDownload = () => {
     const header =

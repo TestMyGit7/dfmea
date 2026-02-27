@@ -1,30 +1,24 @@
-import React from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
+import React from "react";
+import { MultiSelect } from "@/components/ui/multi-select";
+import { cn } from "@/lib/utils";
 
 interface CascadeDropdownsProps {
-  programs: string[]
-  productCategories: string[]
-  subsystems: string[]
-  products: string[]
-  selectedProgram: string
-  selectedProductCategory: string
-  selectedSubsystem: string
-  selectedProduct: string
-  onProgramChange: (v: string) => void
-  onProductCategoryChange: (v: string) => void
-  onSubsystemChange: (v: string) => void
-  onProductChange: (v: string) => void
-  isLoading?: boolean
+  programs: string[];
+  productCategories: string[];
+  subsystems: string[];
+  products: string[];
+  selectedProgram: string[];
+  selectedProductCategory: string[];
+  selectedSubsystem: string[];
+  selectedProduct: string[];
+  onProgramChange: (v: string[]) => void;
+  onProductCategoryChange: (v: string[]) => void;
+  onSubsystemChange: (v: string[]) => void;
+  onProductChange: (v: string[]) => void;
+  isLoading?: boolean;
 }
 
-function DropdownField({
+function MultiSelectField({
   label,
   placeholder,
   value,
@@ -33,38 +27,32 @@ function DropdownField({
   disabled,
   isLoading,
 }: {
-  label: string
-  placeholder: string
-  value: string
-  options: string[]
-  onChange: (v: string) => void
-  disabled: boolean
-  isLoading?: boolean
+  label: string;
+  placeholder: string;
+  value: string[];
+  options: string[];
+  onChange: (v: string[]) => void;
+  disabled: boolean;
+  isLoading?: boolean;
 }) {
   return (
     <div className="flex flex-col gap-1">
-      <Select value={value} onValueChange={onChange} disabled={disabled || isLoading}>
-        <SelectTrigger
-          className={cn(
-            'w-full text-xs',
-            disabled && 'opacity-50 cursor-not-allowed'
-          )}
-        >
-          <SelectValue placeholder={isLoading ? 'Loading...' : placeholder} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map((opt) => (
-            <SelectItem key={opt} value={opt}>
-              {opt}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <MultiSelect
+        value={value}
+        onValueChange={onChange}
+        options={options.map((opt) => ({ label: opt, value: opt }))}
+        placeholder={isLoading ? "Loading..." : placeholder}
+        disabled={disabled || isLoading}
+        maxCount={2}
+        searchPlaceholder={`Search ${label.toLowerCase()}...`}
+      />
       <p className="text-[10px] text-destructive/80">
-        {!disabled && !value ? `Select at least one ${label.toLowerCase()}` : ''}
+        {!disabled && value.length === 0
+          ? `Select at least one ${label.toLowerCase()}`
+          : ""}
       </p>
     </div>
-  )
+  );
 }
 
 export const CascadeDropdowns: React.FC<CascadeDropdownsProps> = ({
@@ -84,7 +72,7 @@ export const CascadeDropdowns: React.FC<CascadeDropdownsProps> = ({
 }) => {
   return (
     <div className="grid grid-cols-4 gap-3">
-      <DropdownField
+      <MultiSelectField
         label="Program"
         placeholder="Program"
         value={selectedProgram}
@@ -93,33 +81,33 @@ export const CascadeDropdowns: React.FC<CascadeDropdownsProps> = ({
         disabled={false}
         isLoading={isLoading}
       />
-      <DropdownField
+      <MultiSelectField
         label="Product Category"
         placeholder="Product Category"
         value={selectedProductCategory}
         options={productCategories}
         onChange={onProductCategoryChange}
-        disabled={!selectedProgram}
+        disabled={selectedProgram.length === 0}
         isLoading={isLoading}
       />
-      <DropdownField
+      <MultiSelectField
         label="Subsystem(s)"
         placeholder="Subsystem(s)"
         value={selectedSubsystem}
         options={subsystems}
         onChange={onSubsystemChange}
-        disabled={!selectedProductCategory}
+        disabled={selectedProductCategory.length === 0}
         isLoading={isLoading}
       />
-      <DropdownField
+      <MultiSelectField
         label="Products"
         placeholder="Products"
         value={selectedProduct}
         options={products}
         onChange={onProductChange}
-        disabled={!selectedSubsystem}
+        disabled={selectedSubsystem.length === 0}
         isLoading={isLoading}
       />
     </div>
-  )
-}
+  );
+};
